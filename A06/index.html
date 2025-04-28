@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say The Name..</title>
+    <link rel="icon" href="../images/Logo.png" type="Logo">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#92A8D1', secondary: '#F7CAC9' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .hero-section {
+            background-image: url('https://i.pinimg.com/736x/df/ba/1b/dfba1b4d6e1b25a857bb59d00dfc84e5.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .member-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .fullscreen-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 50;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .carousel-slide {
+            display: none;
+        }
+
+        .carousel-slide.active {
+            display: block;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .carousel-prev {
+            left: 10px;
+        }
+
+        .carousel-next {
+            right: 10px;
+        }
+
+        .collapse-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .collapse-content.show {
+            max-height: 1000px;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .custom-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.switch-slider {
+            background-color: #f97316;
+        }
+
+        input:checked+.switch-slider:before {
+            transform: translateX(26px);
+        }
+
+        .custom-checkbox {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 4px;
+        }
+
+        .custom-checkbox:hover input~.checkmark {
+            background-color: #ccc;
+        }
+
+        .custom-checkbox input:checked~.checkmark {
+            background-color: #f97316;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f97316;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 40;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full bg-white shadow-md z-40">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <a href="#" class="text-2xl font-['Pacifico'] text-primary">Carats Corner</a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="../index.html" target="_blank"
+                        class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">My
+                        Profile</a>
+                    <a href="#about" class="text-gray-700 hover:text-primary transition-colors">About</a>
+                    <a href="#gallery" class="text-gray-700 hover:text-primary transition-colors">Gallery</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="w-10 h-10 flex items-center justify-center text-gray-700">
+                        <i class="ri-menu-line ri-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="md:hidden hidden py-2">
+                <a href="../index.html" target="_blank" class="block py-2 text-primary font-medium">My
+                    Profile</a>
+                <a href="#about" class="block py-2 text-gray-700 hover:text-primary transition-colors">About</a>
+                <a href="#gallery" class="block py-2 text-gray-700 hover:text-primary transition-colors">Gallery</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero-section h-screen flex items-center justify-center mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <div class="bg-black bg-opacity-60 p-8 rounded-lg max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">SEVENTEEN</h1>
+                <p class="text-xl text-white mb-8">The self-producing K-pop group</p>
+                <a href="#gallery"
+                    class="inline-block bg-primary text-white px-8 py-3 rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">Explore
+                    Gallery</a>
+            </div>
+        </div>
+    </section>
+    <!-- About Seventeen Section -->
+    <section id="about" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">About Seventeen</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-col md:flex-row gap-8 items-center mb-8">
+                    <div class="w-full md:w-1/2">
+                        <img src="https://i.pinimg.com/736x/c3/d9/51/c3d9517e20960cf0c4e78fe496472a23.jpg"
+                            alt="Seventeen Group" class="w-full h-auto rounded-lg shadow-lg">
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <p class="text-gray-700 mb-4"><b>SEVENTEEN</b> is a South Korean boy group formed by Pledis
+                            Entertainment. The group consists of 13 members divided into three units: <b>Hip-Hop, Vocal,
+                                and Performance</b>. They are known as a "self-producing" idol group, with the members
+                            being
+                            actively involved in songwriting, choreography, and other aspects of their music and
+                            performances.</p>
+                        <p class="text-gray-700 mb-4">Debuting on <b>May 26, 2015</b>, with the EP "17 Carat". Seventeen
+                            has
+                            since become one of K-pop's most influential groups, known for their synchronized
+                            choreography, diverse musical styles, and strong teamwork.</p>
+                    </div>
+                </div>
+                <button id="more-info-btn"
+                    class="mx-auto block bg-primary text-white px-6 py-2 rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">More
+                    Information</button>
+                <div id="collapse-content" class="collapse-content mt-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-4 text-primary">Hip-Hop Unit</h3>
+                            <ul class="space-y-2">
+                                <li><span class="font-semibold">S.Coups:</span> Leader, Main Rapper</li>
+                                <li><span class="font-semibold">Wonwoo:</span> Lead Rapper, Vocalist</li>
+                                <li><span class="font-semibold">Mingyu:</span> Lead Rapper, Vocalist</li>
+                                <li><span class="font-semibold">Vernon:</span> Main Rapper, Vocalist</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-4 text-primary">Vocal Unit</h3>
+                            <ul class="space-y-2">
+                                <li><span class="font-semibold">Jeonghan:</span> Lead Vocalist</li>
+                                <li><span class="font-semibold">Joshua:</span> Lead Vocalist</li>
+                                <li><span class="font-semibold">Woozi:</span> Unit Leader, Main Vocalist</li>
+                                <li><span class="font-semibold">DK:</span> Main Vocalist</li>
+                                <li><span class="font-semibold">Seungkwan:</span> Main Vocalist</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-4 text-primary">Performance Unit</h3>
+                            <ul class="space-y-2">
+                                <li><span class="font-semibold">Hoshi:</span> Unit Leader, Main Dancer</li>
+                                <li><span class="font-semibold">Jun:</span> Lead Dancer, Vocalist</li>
+                                <li><span class="font-semibold">The8:</span> Lead Dancer, Vocalist</li>
+                                <li><span class="font-semibold">Dino:</span> Main Dancer, Vocalist</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-bold mb-4">Discography Highlights</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h4 class="text-lg font-semibold mb-2">Korean Albums</h4>
+                                <ul class="space-y-1">
+                                    <li>Love & Letter (2016)</li>
+                                    <li>Teen, Age (2017)</li>
+                                    <li>You Make My Day (2018)</li>
+                                    <li>An Ode (2019)</li>
+                                    <li>Semicolon (2020)</li>
+                                    <li>Your Choice (2021)</li>
+                                    <li>Attacca (2021)</li>
+                                    <li>Face the Sun (2022)</li>
+                                    <li>FML (2023)</li>
+                                    <li>Seventeenth Heaven (2023)</li>
+                                    <li>HAPPY BURSTDAY (2025)</li>
+
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h4 class="text-lg font-semibold mb-2">Japanese Albums</h4>
+                                <ul class="space-y-1">
+                                    <li>We Make You (2018)</li>
+                                    <li>24H (2020)</li>
+                                    <li>Always Yours (2023)</li>
+                                </ul>
+                                <h4 class="text-lg font-semibold mt-4 mb-2">Notable Awards</h4>
+                                <ul class="space-y-1">
+                                    <li>Multiple Daesang (Grand Prize) Awards</li>
+                                    <li>Billboard World Album Chart #1</li>
+                                    <li>Million Seller Status</li>
+                                    <li>Multiple Music Show Wins</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Member Gallery</h2>
+            <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Gallery items will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0">
+                    <a href="#" class="text-2xl font-['Pacifico'] text-primary mb-4 inline-block">Carats Corner</a>
+                    <p class="text-gray-400 max-w-md">A fan-made showcase dedicated to SEVENTEEN and their amazing
+                        journey in K-pop. Created with love by a Carat for Carats.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Official Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://pledis.co.kr/artist/detail/seventeen/" target="_blank"
+                                class="text-gray-400 hover:text-primary transition-colors">Official Website</a></li>
+                        <li><a href="https://www.youtube.com/pledis17" target="_blank"
+                                class="text-gray-400 hover:text-primary transition-colors">YouTube</a></li>
+                        <li><a href="https://twitter.com/pledis_17" target="_blank"
+                                class="text-gray-400 hover:text-primary transition-colors">Twitter</a></li>
+                        <li><a href="https://www.instagram.com/saythename_17" target="_blank"
+                                class="text-gray-400 hover:text-primary transition-colors">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400 text-sm">© 2025 Carats Corner. All rights reserved. This is a fan-made website.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <!-- Fullscreen Member View -->
+    <div id="fullscreen-view" class="fullscreen-view">
+        <div class="container mx-auto px-4 py-8">
+            <button id="back-button"
+                class="absolute top-4 left-4 bg-white text-gray-900 p-2 rounded-full hover:bg-gray-200 transition-colors">
+                <i class="ri-arrow-left-line ri-lg"></i>
+            </button>
+            <div class="flex flex-col lg:flex-row gap-8 mt-12">
+                <div class="w-full lg:w-1/2">
+                    <div class="carousel-container">
+                        <div id="carousel-slides" class="w-full">
+                            <!-- Carousel slides will be dynamically generated -->
+                        </div>
+                        <div class="carousel-nav carousel-prev">
+                            <i class="ri-arrow-left-s-line ri-lg"></i>
+                        </div>
+                        <div class="carousel-nav carousel-next">
+                            <i class="ri-arrow-right-s-line ri-lg"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 bg-white rounded-lg p-8">
+                    <h2 id="member-name" class="text-3xl font-bold mb-4"></h2>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Birth Name</h3>
+                            <p id="member-birth-name" class="text-gray-700"></p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Birthday</h3>
+                            <p id="member-birthday" class="text-gray-700"></p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Position</h3>
+                            <p id="member-position" class="text-gray-700"></p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Unit</h3>
+                            <p id="member-unit" class="text-gray-700"></p>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Biography</h3>
+                    <p id="member-bio" class="text-gray-700 mb-6"></p>
+                    <h3 class="font-semibold text-gray-900 mb-2">Fun Facts</h3>
+                    <ul id="member-facts" class="list-disc pl-5 text-gray-700 mb-6">
+                        <!-- Fun facts will be dynamically generated -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scroll to Top Button -->
+    <div id="scroll-to-top" class="scroll-to-top">
+        <i class="ri-arrow-up-line ri-lg"></i>
+    </div>
+    <script>
+        // Member data
+        const membersData = [
+            {
+                id: 1,
+                name: "S.Coups",
+                birthName: "Choi Seungcheol",
+                birthday: "August 8, 1995",
+                position: "Leader, Main Rapper",
+                unit: "Hip-Hop",
+                mainImage: "https://i.pinimg.com/736x/35/4b/94/354b94101fff6d14ea41534974b5465c.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/8a/22/13/8a22139d2c51b19b25b916c3f09a05a8.jpg",
+                    "https://i.pinimg.com/736x/d6/02/68/d602688478a6d0f3111ef0ed1f90f2e7.jpg",
+                    "https://i.pinimg.com/736x/ea/12/78/ea1278173c6b504a8eda0f2d46381a34.jpg"
+                ],
+                bio: "S.Coups is the leader of SEVENTEEN and the leader of the Hip-Hop unit. Known for his charismatic stage presence and leadership skills, he plays a crucial role in the group's success. Despite his strong image, he's known to be caring and considerate toward the members.",
+                facts: [
+                    "His name S.Coups comes from S for Seungcheol and Coups from Coup d'état",
+                    "He was the first member to be revealed before SEVENTEEN's debut",
+                    "He's known for his leadership and caring personality",
+                    "He has a habit of collecting sneakers",
+                    "He's close friends with BTS's Jin and ASTRO's Moonbin"
+                ]
+            },
+            {
+                id: 2,
+                name: "Jeonghan",
+                birthName: "Yoon Jeonghan",
+                birthday: "October 4, 1995",
+                position: "Lead Vocalist",
+                unit: "Vocal",
+                mainImage: "https://i.pinimg.com/736x/a3/6e/cf/a36ecf640a381d54894a3245504c299d.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/27/d4/e6/27d4e6154f239f03969fdb87cee74de4.jpg",
+                    "https://i.pinimg.com/736x/5c/f2/d5/5cf2d50b59fc57576c7ce41a4cffc0fe.jpg",
+                    "https://i.pinimg.com/736x/31/2c/f1/312cf18ee404a87f9c2f455e9e7ed82b.jpg"
+                ],
+                bio: "Jeonghan is a vocalist in SEVENTEEN's Vocal Unit. Known for his angelic appearance and sweet voice, he's also famous for his strategic mind and playful personality. He's often referred to as the group's 'angel' due to his appearance and his caring nature toward the members.",
+                facts: [
+                    "He was famous for his long hair during SEVENTEEN's debut era",
+                    "He's known as the group's angel but is actually quite mischievous",
+                    "He's very strategic and good at games",
+                    "He loves to sleep and is known for being able to sleep anywhere",
+                    "He has a habit of collecting plushies"
+                ]
+            },
+            {
+                id: 3,
+                name: "Joshua",
+                birthName: "Hong Jisoo",
+                birthday: "December 30, 1995",
+                position: "Lead Vocalist",
+                unit: "Vocal",
+                mainImage: "https://i.pinimg.com/736x/48/85/05/488505dc4999717ec6f2fa0e922853e3.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/60/c5/00/60c5007d5dcc318df1c420e562bc0029.jpg",
+                    "https://i.pinimg.com/736x/db/c3/08/dbc3082c20ab7823299c45acb5bbb053.jpg",
+                    "https://i.pinimg.com/736x/5f/e0/e3/5fe0e3554a4576c486b3d9c35036a000.jpg"
+                ],
+                bio: "Joshua is a vocalist in SEVENTEEN's Vocal Unit. Born and raised in Los Angeles, he's fluent in both English and Korean. Known for his gentle personality and soothing voice, he brings a calm presence to the group. He's also skilled at playing the guitar.",
+                facts: [
+                    "He was born and raised in Los Angeles, California",
+                    "He's fluent in English and Korean",
+                    "He can play the guitar",
+                    "He's a Christian and was a choir boy",
+                    "He's known for his gentle and kind personality"
+                ]
+            },
+            {
+                id: 4,
+                name: "Jun",
+                birthName: "Wen Junhui",
+                birthday: "June 10, 1996",
+                position: "Lead Dancer, Vocalist",
+                unit: "Performance",
+                mainImage: "https://i.pinimg.com/736x/ac/e8/29/ace829701d6fa2218da72c6c76e0a84f.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/cc/1d/5b/cc1d5be1e0b771394d3e3df4e7ad372a.jpg",
+                    "https://i.pinimg.com/736x/cd/d0/f3/cdd0f3878865c14086e40ad6f3d30b7f.jpg",
+                    "https://i.pinimg.com/736x/f5/cc/3c/f5cc3c8f18b946e04ba2e56e57f8c51c.jpg"
+                ],
+                bio: "Jun is a member of SEVENTEEN's Performance Unit. Originally from China, he was a child actor before joining the group. Known for his elegant dancing style and visual appearance, he brings a unique charm to SEVENTEEN. He's also known for his quirky and sometimes mysterious personality.",
+                facts: [
+                    "He was a child actor in China and appeared in many dramas",
+                    "He's fluent in Mandarin, Cantonese, and Korean",
+                    "He's known for his cat-like personality",
+                    "He's a skilled martial artist",
+                    "He has released solo songs in Chinese"
+                ]
+            },
+            {
+                id: 5,
+                name: "Hoshi",
+                birthName: "Kwon Soonyoung",
+                birthday: "June 15, 1996",
+                position: "Performance Unit Leader, Main Dancer",
+                unit: "Performance",
+                mainImage: "https://i.pinimg.com/736x/e2/2a/18/e22a180c790dc01b4e1a026d1d0c290f.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/41/76/65/41766564d8569fa1a66c2bc4b7fa974e.jpg",
+                    "https://i.pinimg.com/736x/83/70/5f/83705f0173e5c4ed398bf7788ba2da61.jpg",
+                    "https://i.pinimg.com/736x/db/5e/c2/db5ec2ffb4663f096a115191f442f90d.jpg"
+                ],
+                bio: "Hoshi is the leader of SEVENTEEN's Performance Unit and one of the group's main dancers. Known for his incredible energy and charismatic performances, he's also involved in choreographing many of the group's dances. His passion for performance and his tiger persona make him stand out on stage.",
+                facts: [
+                    "His name Hoshi means 'star' in Japanese and is also short for 'Ho'ranghai (tiger's gaze) and Si'jakhaeda (to start)",
+                    "He created his own solo persona called 'Horanghae' (a combination of 'horangi' meaning tiger and 'saranghae' meaning I love you)",
+                    "He's heavily involved in SEVENTEEN's choreography",
+                    "He released a solo mixtape called 'Spider'",
+                    "He's known for his high energy and passion for performing"
+                ]
+            },
+            {
+                id: 6,
+                name: "Wonwoo",
+                birthName: "Jeon Wonwoo",
+                birthday: "July 17, 1996",
+                position: "Lead Rapper, Vocalist",
+                unit: "Hip-Hop",
+                mainImage: "https://i.pinimg.com/736x/4f/cb/88/4fcb88ca60cbe89b5f64423174e5ac15.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/d0/4c/8e/d04c8eb1ac2286bf23660a2730988607.jpg",
+                    "https://i.pinimg.com/736x/aa/b6/39/aab6399f3c24b8072991a8be55079cd1.jpg",
+                    "https://i.pinimg.com/736x/e6/f4/10/e6f41000533d5de1c42ade0f6ebb13f2.jpg"
+                ],
+                bio: "Wonwoo is a rapper in SEVENTEEN's Hip-Hop Unit. Known for his deep voice and charismatic stage presence, he adds a unique color to the group's rap line. Off-stage, he's known for his quiet and thoughtful personality, as well as his love for reading and gaming.",
+                facts: [
+                    "He's known for his deep voice and charismatic rapping style",
+                    "He wears glasses and is often called the 'brain' of the group",
+                    "He loves reading books and playing video games",
+                    "He has a quiet and thoughtful personality",
+                    "He's close friends with Mingyu despite their contrasting personalities"
+                ]
+            },
+            {
+                id: 7,
+                name: "Woozi",
+                birthName: "Lee Jihoon",
+                birthday: "November 22, 1996",
+                position: "Vocal Unit Leader, Main Vocalist",
+                unit: "Vocal",
+                mainImage: "https://i.pinimg.com/736x/d6/66/0d/d6660d027aede914831aa39eb1e9d247.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/0d/3f/3e/0d3f3ea5851f4ac44f472ed911f2e393.jpg",
+                    "https://i.pinimg.com/736x/7e/3c/c7/7e3cc754b33af5679787a432d951cbd6.jpg",
+                    "https://i.pinimg.com/736x/dd/5e/d1/dd5ed186d5d57a89f662648c8817da5b.jpg"
+                ],
+                bio: "Woozi is the leader of SEVENTEEN's Vocal Unit and the group's main producer. Despite his small stature, he has a powerful voice and incredible musical talent. He's responsible for composing and producing most of SEVENTEEN's discography, making him a key figure in the group's 'self-producing' identity.",
+                facts: [
+                    "He produces and composes most of SEVENTEEN's songs",
+                    "He has his own studio called 'Woozi's Workshop'",
+                    "Despite his small stature, he has a powerful voice and personality",
+                    "He's skilled at playing multiple instruments including piano and guitar",
+                    "He's known for his perfectionist attitude toward music"
+                ]
+            },
+            {
+                id: 8,
+                name: "DK",
+                birthName: "Lee Seokmin",
+                birthday: "February 18, 1997",
+                position: "Main Vocalist",
+                unit: "Vocal",
+                mainImage: "https://i.pinimg.com/736x/fc/ba/01/fcba01902c19af5fbd343c98cd5d4f96.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/81/0e/c2/810ec26a372da73b5149ce39688a5ad0.jpg",
+                    "https://i.pinimg.com/736x/d2/c4/4d/d2c44d6d3252050b48920251561ac114.jpg",
+                    "https://i.pinimg.com/736x/ab/d1/32/abd1329ab7cb8dbe00895ad6685e986f.jpg"
+                ],
+                bio: "DK (Dokyeom) is one of SEVENTEEN's main vocalists. Known for his powerful and stable voice, he's often praised for his vocal range and technique. Beyond his musical talents, he's beloved for his bright personality and infectious smile, earning him the nickname 'sunshine' among fans.",
+                facts: [
+                    "His name Dokyeom means 'doing multiple things' in Korean",
+                    "He's known for his powerful vocal range and technique",
+                    "He has performed in musical theater, starring in 'Xcalibur' and 'Hedwig and the Angry Inch'",
+                    "He's known for his bright personality and is often called the group's 'sunshine'",
+                    "He's part of the group's special vocal team called 'BooSeokSoon' with Seungkwan and Hoshi"
+                ]
+            },
+            {
+                id: 9,
+                name: "Mingyu",
+                birthName: "Kim Mingyu",
+                birthday: "April 6, 1997",
+                position: "Lead Rapper, Vocalist",
+                unit: "Hip-Hop",
+                mainImage: "https://i.pinimg.com/736x/2d/63/9b/2d639bf46ab04231a76cc8abea6f7333.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/37/63/82/37638299180a1fab697b1846d8915b5e.jpg",
+                    "https://i.pinimg.com/736x/38/4b/c0/384bc04c7a8925d75ae6ff0e096c5612.jpg",
+                    "https://i.pinimg.com/736x/d2/4b/f4/d24bf46adcfe8be194bfcf71b3a7960c.jpg"
+                ],
+                bio: "Mingyu is a rapper in SEVENTEEN's Hip-Hop Unit. Standing at 187cm, he's the tallest member of the group and is known for his striking visuals. Beyond his rap skills and visual appeal, he's also known for his variety of talents including cooking, photography, and DIY projects.",
+                facts: [
+                    "He's the tallest member at 187cm (6'2\")",
+                    "He's known for his visuals and is often called the group's 'face'",
+                    "He's skilled at cooking and often cooks for the members",
+                    "He's interested in photography and has taken many photos for the group",
+                    "Despite his perfect image, he's known for being clumsy, earning him the nickname 'Mingoo'"
+                ]
+            },
+            {
+                id: 10,
+                name: "The8",
+                birthName: "Xu Minghao",
+                birthday: "November 7, 1997",
+                position: "Lead Dancer, Vocalist",
+                unit: "Performance",
+                mainImage: "https://i.pinimg.com/736x/92/c1/b6/92c1b6fe1cae5ed86796b21538096a12.jpg ",
+                images: [
+                    "https://i.pinimg.com/736x/6d/0a/d3/6d0ad34cb0ff64526b248876eb0a2a73.jpg",
+                    "https://i.pinimg.com/736x/e0/88/e1/e088e180f2dc762cdce9e326c21af41d.jpg",
+                    "https://i.pinimg.com/736x/c1/e7/4f/c1e74fc21ecf1b5a7a5064a964165ad5.jpg"
+                ],
+                bio: "The8 is a member of SEVENTEEN's Performance Unit. Originally from China, he brings a unique dancing style influenced by his background in b-boying and traditional Chinese dance. Known for his artistic sensibilities, he's involved in various creative pursuits including fashion, painting, and directing music videos.",
+                facts: [
+                    "His stage name 'The8' refers to the lucky number 8 in Chinese culture and the infinity symbol when turned sideways",
+                    "He was a competitive b-boy before joining SEVENTEEN",
+                    "He's skilled in traditional Chinese dance",
+                    "He has a strong interest in fashion and art",
+                    "He has released solo songs in Chinese and directed his own music videos"
+                ]
+            },
+            {
+                id: 11,
+                name: "Seungkwan",
+                birthName: "Boo Seungkwan",
+                birthday: "January 16, 1998",
+                position: "Main Vocalist",
+                unit: "Vocal",
+                mainImage: "https://i.pinimg.com/736x/99/e6/d8/99e6d80107333ffac6fd2fd375ce0498.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/0c/66/12/0c66125de9d50e1d39f6119d0ab964f3.jpg",
+                    "https://i.pinimg.com/736x/59/a7/cb/59a7cb21f0fec3f822396015fd54a1a5.jpg",
+                    "https://i.pinimg.com/736x/60/c5/2f/60c52fe8692d983e677ec2225bf75d16.jpg"
+                ],
+                bio: "Seungkwan is one of SEVENTEEN's main vocalists. Known for his powerful voice and emotional delivery, he's a key member of the Vocal Unit. Beyond his singing abilities, he's famous for his outgoing personality and variety skills, making him one of the group's most recognizable members on Korean television.",
+                facts: [
+                    "He's from Jeju Island and often speaks in Jeju dialect",
+                    "He's known for his powerful vocals and emotional performances",
+                    "He's one of the group's variety stars and appears on many Korean TV shows",
+                    "He's known for his witty humor and outgoing personality",
+                    "He's part of the group's special vocal team called 'BooSeokSoon' with DK and Hoshi"
+                ]
+            },
+            {
+                id: 12,
+                name: "Vernon",
+                birthName: "Hansol Vernon Chwe",
+                birthday: "February 18, 1998",
+                position: "Main Rapper, Vocalist",
+                unit: "Hip-Hop",
+                mainImage: "https://i.pinimg.com/736x/0f/80/d7/0f80d705e7049573b4571b50361979ea.jpg",
+                images: [
+                    "https://i.pinimg.com/736x/78/21/c5/7821c5ca00955d4a81cdf54bfb47b93a.jpg",
+                    "https://i.pinimg.com/736x/8e/ac/fd/8eacfdb0b2f467666e0f4f2d191b632c.jpg",
+                    "https://i.pinimg.com/736x/e3/81/e7/e381e7a86587c795e34e38705ef4febd.jpg",
+                ],
+                bio: "Vernon is a rapper in SEVENTEEN's Hip-Hop Unit. Born to a Korean mother and American father, he's bilingual in Korean and English. Known for his unique flow and laid-back personality, he brings an international flavor to the group's sound. His thoughtful nature and distinctive style make him stand out among the members.",
+                facts: [
+                    "He was born in New York and is half-Korean, half-American",
+                    "He's fluent in both Korean and English",
+                    "He appeared on the Korean show 'Show Me The Money' before debut",
+                    "He's known for his unique fashion sense and laid-back personality",
+                    "He has collaborated with artists outside of SEVENTEEN including Charli XCX"
+                ]
+            },
+            {
+                id: 13,
+                name: "Dino",
+                birthName: "Lee Chan",
+                birthday: "February 11, 1999",
+                position: "Main Dancer, Vocalist",
+                unit: "Performance",
+                mainImage: "https://i.pinimg.com/736x/de/4d/67/de4d67c95612ead8d0876c2dbeb853a3.jpg",
+                images: [
+"https://i.pinimg.com/736x/14/e0/0e/14e00ec2664df1c1cc1bb2264766deff.jpg",
+"https://i.pinimg.com/736x/c3/66/14/c3661425f475b121bee13c9b7b077201.jpg",
+"https://i.pinimg.com/736x/46/0b/2c/460b2ce01ae76600b78883afceb01fd7.jpg"
+            ],
+                bio: "Dino is the youngest member of SEVENTEEN and part of the Performance Unit. Despite being the maknae (youngest), he's known for his mature mindset and professional attitude. His exceptional dancing skills and stage presence make him a standout performer in the group.",
+                facts: [
+                    "He's the youngest member (maknae) of SEVENTEEN",
+                    "He started dancing at a very young age and was inspired by Michael Jackson",
+                    "He created his own series called 'Dino's Danceology' where he showcases his dance skills",
+                    "Despite being the youngest, he's known for his mature and professional attitude",
+                    "His catchphrase is 'I'm not just SEVENTEEN's maknae, I'm SEVENTEEN's Dino!'"
+                ]
+            }
+        ];
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', function () {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // More Information toggle
+            const moreInfoBtn = document.getElementById('more-info-btn');
+            const collapseContent = document.getElementById('collapse-content');
+            moreInfoBtn.addEventListener('click', function () {
+                collapseContent.classList.toggle('show');
+                if (collapseContent.classList.contains('show')) {
+                    moreInfoBtn.textContent = 'Hide Information';
+                } else {
+                    moreInfoBtn.textContent = 'More Information';
+                }
+            });
+            // Generate gallery
+            const galleryContainer = document.getElementById('gallery-container');
+            membersData.forEach(member => {
+                const memberCard = document.createElement('div');
+                memberCard.className = 'member-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300';
+                memberCard.dataset.memberId = member.id;
+                memberCard.innerHTML = `
+<div class="aspect-[5/6] overflow-hidden">
+<img src="${member.mainImage}" alt="${member.name}" class="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-105">
+</div>
+<div class="p-4">
+<h3 class="text-xl font-bold mb-1">${member.name}</h3>
+<p class="text-gray-600 mb-2">${member.position}</p>
+<p class="text-primary font-medium">${member.unit} Unit</p>
+</div>
+`;
+                memberCard.addEventListener('click', function () {
+                    showFullscreenView(member.id);
+                });
+                galleryContainer.appendChild(memberCard);
+            });
+            // Fullscreen view functionality
+            const fullscreenView = document.getElementById('fullscreen-view');
+            const backButton = document.getElementById('back-button');
+            const galleryButton = document.getElementById('gallery-button');
+            const carouselSlides = document.getElementById('carousel-slides');
+            const carouselPrev = document.querySelector('.carousel-prev');
+            const carouselNext = document.querySelector('.carousel-next');
+            backButton.addEventListener('click', hideFullscreenView);
+            let currentSlideIndex = 0;
+            function showFullscreenView(memberId) {
+                const member = membersData.find(m => m.id === memberId);
+                // Set member details
+                document.getElementById('member-name').textContent = member.name;
+                document.getElementById('member-birth-name').textContent = member.birthName;
+                document.getElementById('member-birthday').textContent = member.birthday;
+                document.getElementById('member-position').textContent = member.position;
+                document.getElementById('member-unit').textContent = member.unit + ' Unit';
+                document.getElementById('member-bio').textContent = member.bio;
+                // Set member facts
+                const factsList = document.getElementById('member-facts');
+                factsList.innerHTML = '';
+                member.facts.forEach(fact => {
+                    const li = document.createElement('li');
+                    li.textContent = fact;
+                    factsList.appendChild(li);
+                });
+                // Set carousel slides
+                carouselSlides.innerHTML = '';
+                // Add main image as first slide
+                const mainSlide = document.createElement('div');
+                mainSlide.className = 'carousel-slide active';
+                mainSlide.innerHTML = `<img src="${member.mainImage}" alt="${member.name}" class="w-full h-auto rounded-lg">`;
+                carouselSlides.appendChild(mainSlide);
+                // Add additional images
+                member.images.forEach(image => {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    slide.innerHTML = `<img src="${image}" alt="${member.name}" class="w-full h-auto rounded-lg">`;
+                    carouselSlides.appendChild(slide);
+                });
+                currentSlideIndex = 0;
+                // Show fullscreen view
+                fullscreenView.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+            function hideFullscreenView() {
+                fullscreenView.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            // Carousel navigation
+            carouselPrev.addEventListener('click', function () {
+                navigateCarousel(-1);
+            });
+            carouselNext.addEventListener('click', function () {
+                navigateCarousel(1);
+            });
+            function navigateCarousel(direction) {
+                const slides = document.querySelectorAll('.carousel-slide');
+                slides[currentSlideIndex].classList.remove('active');
+                currentSlideIndex = (currentSlideIndex + direction + slides.length) % slides.length;
+                slides[currentSlideIndex].classList.add('active');
+            }
+            // Scroll to top button
+            const scrollToTopButton = document.getElementById('scroll-to-top');
+            window.addEventListener('scroll', function () {
+                if (window.pageYOffset > 300) {
+                    scrollToTopButton.style.opacity = '1';
+                } else {
+                    scrollToTopButton.style.opacity = '0';
+                }
+            });
+            scrollToTopButton.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        // Close mobile menu if open
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
