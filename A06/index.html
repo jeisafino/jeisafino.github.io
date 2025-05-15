@@ -1,11 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Say The Name..</title>
     <link rel="icon" href="../images/Logo.png" type="Logo">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#92A8D1', secondary: '#F7CAC9' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,226 +16,168 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-    <style>
-        :where([class^="ri-"])::before {
-            content: "\f3c2";
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        .hero-section {
-            background-image: url('https://i.pinimg.com/736x/df/ba/1b/dfba1b4d6e1b25a857bb59d00dfc84e5.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .member-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .member-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .fullscreen-view {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 50;
-            display: none;
-            overflow-y: auto;
-        }
-
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .carousel-slide {
-            display: none;
-        }
-
-        .carousel-slide.active {
-            display: block;
-        }
-
-        .carousel-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .carousel-prev {
-            left: 10px;
-        }
-
-        .carousel-next {
-            right: 10px;
-        }
-
-        .collapse-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease;
-        }
-
-        .collapse-content.show {
-            max-height: 1000px;
-        }
-
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        .custom-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .custom-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .switch-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .switch-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked+.switch-slider {
-            background-color: #f97316;
-        }
-
-        input:checked+.switch-slider:before {
-            transform: translateX(26px);
-        }
-
-        .custom-checkbox {
-            position: relative;
-            padding-left: 30px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .custom-checkbox input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-        }
-
-        .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 20px;
-            width: 20px;
-            background-color: #eee;
-            border-radius: 4px;
-        }
-
-        .custom-checkbox:hover input~.checkmark {
-            background-color: #ccc;
-        }
-
-        .custom-checkbox input:checked~.checkmark {
-            background-color: #f97316;
-        }
-
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-
-        .custom-checkbox input:checked~.checkmark:after {
-            display: block;
-        }
-
-        .custom-checkbox .checkmark:after {
-            left: 7px;
-            top: 3px;
-            width: 6px;
-            height: 10px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-
-        .scroll-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #f97316;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 40;
-        }
-    </style>
 </head>
+<style>
+    :where([class^="ri-"])::before {
+        content: "\f3c2";
+    }
 
-<body>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        scroll-behavior: smooth;
+    }
+
+    .hero-section {
+        background-image: url('https://i.pinimg.com/736x/df/ba/1b/dfba1b4d6e1b25a857bb59d00dfc84e5.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .member-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .member-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .fullscreen-view {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 50;
+        display: none;
+        overflow-y: auto;
+    }
+
+    .carousel-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .carousel-slide {
+        display: none;
+    }
+
+    .carousel-slide.active {
+        display: block;
+    }
+
+    .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .carousel-prev {
+        left: 10px;
+    }
+
+    .carousel-next {
+        right: 10px;
+    }
+
+    .collapse-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+    }
+
+    .collapse-content.show {
+        max-height: 1000px;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .custom-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+
+    .custom-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .switch-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .switch-slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #f97316;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 40;
+    }
+</style>
+
+<body id="body">
     <!-- Navigation Bar -->
-    <nav class="fixed top-0 left-0 w-full bg-white shadow-md z-40">
+    <nav id="nav" class="fixed top-0 left-0 w-full bg-gray-900 shadow-md z-40">
         <div class="container mx-auto px-4 py-3">
             <div class="flex items-center justify-between">
                 <a href="#" class="text-2xl font-['Pacifico'] text-primary">Carats Corner</a>
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="../index.html" target="_blank"
-                        class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">My
+                        class="text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">My
                         Profile</a>
-                    <a href="#about" class="text-gray-700 hover:text-primary transition-colors">About</a>
-                    <a href="#gallery" class="text-gray-700 hover:text-primary transition-colors">Gallery</a>
+                    <a id="colorBtn" onclick="changeMode()"
+                        class=" px-4 py-2 btn btn-dark">Dark
+                        Mode</a>
+                    <a href="#about" class="text-white hover:text-primary transition-colors">About</a>
+                    <a href="#gallery" class="text-white hover:text-primary transition-colors">Gallery</a>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-button" class="w-10 h-10 flex items-center justify-center text-gray-700">
@@ -244,6 +188,7 @@
             <div id="mobile-menu" class="md:hidden hidden py-2">
                 <a href="../index.html" target="_blank" class="block py-2 text-primary font-medium">My
                     Profile</a>
+                <a id="colorBtn" onclick="changeMode()" class="block py-2 text-primary font-medium">Dark Mode</a>
                 <a href="#about" class="block py-2 text-gray-700 hover:text-primary transition-colors">About</a>
                 <a href="#gallery" class="block py-2 text-gray-700 hover:text-primary transition-colors">Gallery</a>
             </div>
@@ -252,11 +197,11 @@
     <!-- Hero Section -->
     <section class="hero-section h-screen flex items-center justify-center mt-16">
         <div class="container mx-auto px-4 text-center">
-            <div class="bg-black bg-opacity-60 p-8 rounded-lg max-w-3xl mx-auto">
+            <div class=" bg-opacity-60 p-8 rounded-lg max-w-3xl mx-auto">
                 <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">SEVENTEEN</h1>
                 <p class="text-xl text-white mb-8">The self-producing K-pop group</p>
                 <a href="#gallery"
-                    class="inline-block bg-primary text-white px-8 py-3 rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">Explore
+                    class="inline-block bg-gray-700 text-white px-8 py-3 rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">Explore
                     Gallery</a>
             </div>
         </div>
@@ -285,11 +230,11 @@
                     </div>
                 </div>
                 <button id="more-info-btn"
-                    class="mx-auto block bg-primary text-white px-6 py-2 rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">More
+                    class="mx-auto block bg-gray-700 text-white px-6 py-2 rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">More
                     Information</button>
-                <div id="collapse-content" class="collapse-content mt-8">
+                <div id="collapse-content" class="collapse-content mt-8 mx-auto">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class=" p-6 rounded-lg shadow-md">
                             <h3 class="text-xl font-bold mb-4 text-primary">Hip-Hop Unit</h3>
                             <ul class="space-y-2">
                                 <li><span class="font-semibold">S.Coups:</span> Leader, Main Rapper</li>
@@ -298,7 +243,7 @@
                                 <li><span class="font-semibold">Vernon:</span> Main Rapper, Vocalist</li>
                             </ul>
                         </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class=" p-6 rounded-lg shadow-md">
                             <h3 class="text-xl font-bold mb-4 text-primary">Vocal Unit</h3>
                             <ul class="space-y-2">
                                 <li><span class="font-semibold">Jeonghan:</span> Lead Vocalist</li>
@@ -308,7 +253,7 @@
                                 <li><span class="font-semibold">Seungkwan:</span> Main Vocalist</li>
                             </ul>
                         </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class=" p-6 rounded-lg shadow-md">
                             <h3 class="text-xl font-bold mb-4 text-primary">Performance Unit</h3>
                             <ul class="space-y-2">
                                 <li><span class="font-semibold">Hoshi:</span> Unit Leader, Main Dancer</li>
@@ -318,10 +263,10 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="mt-8">
+                    <div class="container mx-auto px-4 mt-8">
                         <h3 class="text-2xl font-bold mb-4">Discography Highlights</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class=" p-6 rounded-lg shadow-md">
                                 <h4 class="text-lg font-semibold mb-2">Korean Albums</h4>
                                 <ul class="space-y-1">
                                     <li>Love & Letter (2016)</li>
@@ -338,7 +283,7 @@
 
                                 </ul>
                             </div>
-                            <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class=" p-6 rounded-lg shadow-md">
                                 <h4 class="text-lg font-semibold mb-2">Japanese Albums</h4>
                                 <ul class="space-y-1">
                                     <li>We Make You (2018)</li>
@@ -360,11 +305,11 @@
         </div>
     </section>
     <!-- Gallery Section -->
-    <section id="gallery" class="py-20 bg-gray-50">
+    <section id="gallery" class="py-20">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Member Gallery</h2>
             <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <!-- Gallery items will be dynamically generated here -->
+
             </div>
         </div>
     </section>
@@ -408,7 +353,7 @@
                 <div class="w-full lg:w-1/2">
                     <div class="carousel-container">
                         <div id="carousel-slides" class="w-full">
-                            <!-- Carousel slides will be dynamically generated -->
+
                         </div>
                         <div class="carousel-nav carousel-prev">
                             <i class="ri-arrow-left-s-line ri-lg"></i>
@@ -418,31 +363,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full lg:w-1/2 bg-white rounded-lg p-8">
-                    <h2 id="member-name" class="text-3xl font-bold mb-4"></h2>
+                <div class="w-full lg:w-1/2 bg-gray-900 shadow-md rounded-lg p-8">
+                    <h2 id="member-name" class="text-3xl font-bold mb-4 text-white"></h2>
                     <div class="grid grid-cols-2 gap-4 mb-6">
                         <div>
-                            <h3 class="font-semibold text-gray-900">Birth Name</h3>
-                            <p id="member-birth-name" class="text-gray-700"></p>
+                            <h3 class="font-semibold text-white">Birth Name</h3>
+                            <p id="member-birth-name" class="text-white"></p>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900">Birthday</h3>
-                            <p id="member-birthday" class="text-gray-700"></p>
+                            <h3 class="font-semibold text-white">Birthday</h3>
+                            <p id="member-birthday" class="text-white"></p>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900">Position</h3>
-                            <p id="member-position" class="text-gray-700"></p>
+                            <h3 class="font-semibold text-white">Position</h3>
+                            <p id="member-position" class="text-white"></p>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900">Unit</h3>
-                            <p id="member-unit" class="text-gray-700"></p>
+                            <h3 class="font-semibold text-white">Unit</h3>
+                            <p id="member-unit" class="text-white"></p>
                         </div>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Biography</h3>
-                    <p id="member-bio" class="text-gray-700 mb-6"></p>
-                    <h3 class="font-semibold text-gray-900 mb-2">Fun Facts</h3>
-                    <ul id="member-facts" class="list-disc pl-5 text-gray-700 mb-6">
-                        <!-- Fun facts will be dynamically generated -->
+                    <h3 class="font-semibold text-white mb-2">Biography</h3>
+                    <p id="member-bio" class="text-white mb-6"></p>
+                    <h3 class="font-semibold text-white mb-2">Fun Facts</h3>
+                    <ul id="member-facts" class="list-disc pl-5 text-white mb-6">
+
                     </ul>
                 </div>
             </div>
@@ -453,6 +398,24 @@
         <i class="ri-arrow-up-line ri-lg"></i>
     </div>
     <script>
+        //Dark Mode
+        var mode = "light";
+        function changeMode() {
+            var body = document.getElementById("body");
+            var colorBtn = document.getElementById("colorBtn");
+            mode = mode == "light" ? "dark" : "light";
+
+            var btnText = mode == "dark" ? "Light Mode" : "Dark Mode";
+            var btnClass = mode == "dark" ? "btn-light" : "btn-dark";
+
+            colorBtn.classList.remove("btn-light");
+            colorBtn.classList.remove("btn-dark");
+            colorBtn.classList.add(btnClass);
+            colorBtn.innerHTML = btnText;
+
+            body.setAttribute("data-bs-theme", mode);
+
+        }
         // Member data
         const membersData = [
             {
@@ -728,10 +691,10 @@
                 unit: "Performance",
                 mainImage: "https://i.pinimg.com/736x/de/4d/67/de4d67c95612ead8d0876c2dbeb853a3.jpg",
                 images: [
-"https://i.pinimg.com/736x/14/e0/0e/14e00ec2664df1c1cc1bb2264766deff.jpg",
-"https://i.pinimg.com/736x/c3/66/14/c3661425f475b121bee13c9b7b077201.jpg",
-"https://i.pinimg.com/736x/46/0b/2c/460b2ce01ae76600b78883afceb01fd7.jpg"
-            ],
+                    "https://i.pinimg.com/736x/14/e0/0e/14e00ec2664df1c1cc1bb2264766deff.jpg",
+                    "https://i.pinimg.com/736x/c3/66/14/c3661425f475b121bee13c9b7b077201.jpg",
+                    "https://i.pinimg.com/736x/46/0b/2c/460b2ce01ae76600b78883afceb01fd7.jpg"
+                ],
                 bio: "Dino is the youngest member of SEVENTEEN and part of the Performance Unit. Despite being the maknae (youngest), he's known for his mature mindset and professional attitude. His exceptional dancing skills and stage presence make him a standout performer in the group.",
                 facts: [
                     "He's the youngest member (maknae) of SEVENTEEN",
@@ -765,7 +728,7 @@
             const galleryContainer = document.getElementById('gallery-container');
             membersData.forEach(member => {
                 const memberCard = document.createElement('div');
-                memberCard.className = 'member-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300';
+                memberCard.className = 'member-card rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300';
                 memberCard.dataset.memberId = member.id;
                 memberCard.innerHTML = `
 <div class="aspect-[5/6] overflow-hidden">
@@ -879,6 +842,9 @@
             });
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+        </script>
 </body>
 
 </html>
